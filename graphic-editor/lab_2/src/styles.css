@@ -1,76 +1,52 @@
-:root {
-  --bar: #ececec;
-  --line: #b5b5b5;
-  --hover: #d6e4f7;
-  --text: #1c1c1c;
-}
-
 * { box-sizing: border-box; }
 
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
 body {
+  margin: 0;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  font: 14px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
-  color: var(--text);
-  background: var(--bar);
+  overflow: hidden;
+  font: 14px system-ui, sans-serif;
+  background: #ececec;
 }
 
-#menubar {
-  display: flex;
-  background: var(--bar);
-  border-bottom: 1px solid var(--line);
-  user-select: none;
+nav { display: flex; flex: none; border-bottom: 1px solid #b5b5b5; user-select: none; }
+details { position: relative; }
+summary { padding: 6px 12px; list-style: none; cursor: default; }
+summary::-webkit-details-marker { display: none; }
+
+.menu {
+  position: absolute;
+  z-index: 10;
+  display: grid;
+  min-width: 170px;
+  padding: 3px 0;
+  background: white;
+  border: 1px solid #b5b5b5;
 }
 
-.menu { position: relative; }
-
-.menu-title {
-  padding: 6px 12px;
+button, label {
+  position: relative;
+  padding: 5px 10px;
   border: 0;
   background: none;
   font: inherit;
-  color: inherit;
-  cursor: default;
-}
-.menu-title:hover,
-.menu-title.active { background: var(--hover); }
-
-.menu-dropdown {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  min-width: 170px;
-  margin: 0;
-  padding: 3px 0;
-  list-style: none;
-  background: #fff;
-  border: 1px solid var(--line);
-  box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.18);
-  z-index: 10;
-}
-.menu-dropdown.open { display: block; }
-
-.menu-dropdown li {
-  display: flex;
-  gap: 6px;
-  padding: 5px 14px 5px 8px;
-  cursor: default;
+  text-align: left;
   white-space: nowrap;
+  cursor: default;
 }
-.menu-dropdown li:hover { background: var(--hover); }
-.menu-dropdown .mark { width: 14px; text-align: center; }
+
+summary:hover, button:hover, label:hover { background: #d6e4f7; }
+.menu input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.menu span::before { content: ""; display: inline-block; width: 20px; color: #1966c8; }
+.menu input:checked + span::before { content: "✓"; }
+.menu input:focus-visible + span { outline: 1px solid #1966c8; }
 
 #stage {
   position: relative;
   flex: 1;
   min-height: 0;
-  background: #fff;
+  background: white;
 }
 
 #canvas {
@@ -83,7 +59,8 @@ body {
 }
 
 #status {
+  flex: none;
   padding: 4px 12px;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid #b5b5b5;
   font-size: 12px;
 }

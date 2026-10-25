@@ -3,11 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lab2 — графічний редактор</title>
+    <title>Графічний редактор — варіант 14</title>
     <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
-    <div id="menubar"></div>
+    <nav>
+      <details>
+        <summary>Файл</summary>
+        <div class="menu"><button id="clear">Очистити</button></div>
+      </details>
+      <details>
+        <summary>Об’єкти</summary>
+        <div class="menu">
+          <label><input type="radio" name="shape" value="point" checked /><span>Крапка</span></label>
+          <label><input type="radio" name="shape" value="line" /><span>Лінія</span></label>
+          <label><input type="radio" name="shape" value="rect" /><span>Прямокутник</span></label>
+          <label><input type="radio" name="shape" value="ellipse" /><span>Еліпс</span></label>
+        </div>
+      </details>
+      <details>
+        <summary>Довідка</summary>
+        <div class="menu"><button id="about">Про програму</button></div>
+      </details>
+    </nav>
     <div id="stage"><canvas id="canvas"></canvas></div>
     <div id="status"></div>
     <script type="module" src="/src/main.ts"></script>
