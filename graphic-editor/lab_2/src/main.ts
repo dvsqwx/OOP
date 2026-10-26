@@ -6,8 +6,10 @@ import type { Shape } from "./shape";
 import { JOURNAL_NUMBER, MAX_SHAPES } from "./variant";
 
 const SHAPE_KINDS = { point: PointShape, line: LineShape, rect: RectShape, ellipse: EllipseShape };
-const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-const status = document.getElementById("status")!;
+const element = document.getElementById("canvas");
+if (!(element instanceof HTMLCanvasElement)) throw new Error("Полотно не знайдено");
+const canvas = element;
+const status = document.getElementById("status");
 const ctx = canvas.getContext("2d");
 if (!ctx) throw new Error("Canvas 2D недоступний");
 
@@ -18,9 +20,9 @@ let pointerId: number | null = null;
 
 const repaint = (): void => {
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
-  for (let i = 0; i < count; i++) shapes[i]!.show(ctx);
+  for (let i = 0; i < count; i++) shapes[i]?.show(ctx);
   draft?.show(ctx, true);
-  status.textContent = `Фігур: ${count} з ${MAX_SHAPES}`;
+  if (status) status.textContent = `Фігур: ${count} з ${MAX_SHAPES}`;
 };
 
 function cancel(): void {
@@ -40,32 +42,36 @@ function update(e: PointerEvent, finish = false): void {
   } else repaint();
 }
 
-canvas.onpointerdown = (e) => {
+canvas.addEventListener("pointerdown", (e) => {
   if (e.button !== 0 || draft || document.querySelector("details[open]")) return;
   if (count >= MAX_SHAPES) return alert(`Масив заповнений: максимум ${MAX_SHAPES} фігур.`);
-  const input = document.querySelector<HTMLInputElement>('input[name="shape"]:checked')!;
+  const input = document.querySelector<HTMLInputElement>('input[name="shape"]:checked');
+  if (!input) return;
   const ShapeClass = SHAPE_KINDS[input.value as keyof typeof SHAPE_KINDS];
+  if (!ShapeClass) return;
   draft = new ShapeClass(e.offsetX, e.offsetY);
   pointerId = e.pointerId;
   canvas.setPointerCapture(pointerId);
   repaint();
-};
-canvas.onpointermove = (e) => update(e);
-canvas.onpointerup = (e) => update(e, true);
-canvas.onpointercancel = (e) => {
+});
+canvas.addEventListener("pointermove", (e) => update(e));
+canvas.addEventListener("pointerup", (e) => update(e, true));
+canvas.addEventListener("pointercancel", (e) => {
   if (e.pointerId === pointerId) cancel();
-};
+});
 
-document.getElementById("clear")!.onclick = () => {
+document.getElementById("clear")?.addEventListener("click", () => {
   shapes.fill(undefined);
   count = 0;
   cancel();
-};
-document.getElementById("about")!.onclick = () =>
-  alert(`Графічний редактор об’єктів\nЛабораторна робота №2\nВаріант ${JOURNAL_NUMBER}`);
+});
+document.getElementById("about")?.addEventListener("click", () =>
+  alert(`Графічний редактор об’єктів\nЛабораторна робота №2\nВаріант ${JOURNAL_NUMBER}`)
+);
 
 document.addEventListener("click", (e) => {
-  const target = e.target as HTMLElement;
+  const target = e.target;
+  if (!(target instanceof Element)) return;
   document.querySelectorAll("details").forEach((menu) => {
     if (!menu.contains(target) || target.closest("input, button")) menu.open = false;
   });
