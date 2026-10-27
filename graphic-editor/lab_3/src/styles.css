@@ -1,0 +1,71 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font: 14px system-ui, sans-serif;
+  background: #ececec;
+}
+
+nav { display: flex; flex: none; border-bottom: 1px solid #b5b5b5; user-select: none; }
+details { position: relative; }
+summary { padding: 6px 12px; list-style: none; cursor: default; }
+summary::-webkit-details-marker { display: none; }
+
+.menu {
+  position: absolute;
+  z-index: 10;
+  display: grid;
+  min-width: 170px;
+  padding: 3px 0;
+  background: white;
+  border: 1px solid #b5b5b5;
+}
+
+button, label {
+  position: relative;
+  padding: 5px 10px;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  white-space: nowrap;
+  cursor: default;
+}
+
+summary:hover, button:hover, label:hover { background: #d6e4f7; }
+.menu input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.menu span::before { content: ""; display: inline-block; width: 20px; color: #1966c8; }
+.menu input:checked + span::before { content: "✓"; }
+.menu input:focus-visible + span { outline: 1px solid #1966c8; }
+
+#stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: white;
+}
+
+#canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+#status {
+  flex: none;
+  padding: 4px 12px;
+  border-top: 1px solid #b5b5b5;
+  font-size: 12px;
+}
+
+#toolbar { display: flex; flex: none; gap: 4px; padding: 4px 8px; border-bottom: 1px solid #b5b5b5; }
+#toolbar button { display: grid; place-items: center; width: 34px; height: 30px; padding: 4px; }
+#toolbar button[aria-pressed="true"] { background: #d6e4f7; outline: 1px solid #1966c8; }
+#toolbar svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; pointer-events: none; }
